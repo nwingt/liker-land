@@ -51,7 +51,6 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/vuetify',
   ],
   /*
   ** Axios module configuration
