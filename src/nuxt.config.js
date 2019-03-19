@@ -53,6 +53,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    'nuxt-svg-loader',
     'portal-vue/nuxt',
   ],
   /*
@@ -102,7 +103,7 @@ module.exports = {
             enforce: 'pre',
             test: /\.(js|vue)$/,
             loader: 'eslint-loader',
-            exclude: /(node_modules)/,
+            exclude: /(node_modules)||(.svg$)/,
           });
         } else {
           config.devtool = 'source-map';
