@@ -65,6 +65,7 @@ module.exports = {
   },
 
   router: {
+    middleware: 'sliding-menu',
     extendRoutes(routes, resolve) {
       const index = routes.findIndex(route => route.path === '/');
       routes[index].children.push({
