@@ -49,5 +49,5 @@
     "prettier": "^1.16.4",
     "webpack": "^4.29.5"
   },
-  "private": true
+  "private": false
 }
