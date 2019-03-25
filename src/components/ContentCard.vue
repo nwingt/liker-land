@@ -57,10 +57,7 @@ import { LIKE_CO_URL_BASE } from '~/constant';
 
 import LikeUnit from '~/assets/icons/like-unit.svg';
 
-import {
-  getUserMinAPI,
-  getLikeButtonTotalLikeCountAPI,
-} from '~/util/api';
+import { getUserMinAPI, getLikeButtonTotalLikeCountAPI } from '~/util/api';
 import { getAvatarHaloTypeFromUser } from '~/util/user';
 
 export default {
