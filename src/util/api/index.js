@@ -17,3 +17,15 @@ export const getOAuthLoginAPI = () => '/api/users/login';
 export const getOAuthCallbackAPI = () => `/api/users/login`;
 export const getPayPalPaymentAPI = () => `/api/civic/payment/paypal`;
 export const getLoginStatus = () => `/api/users/self`;
+
+export const getUserMinAPI = likerId =>
+  `https://${
+    IS_TESTNET ? 'api.rinkeby.like.co' : 'api.like.co'
+  }/api/users/id/${likerId}/min`;
+
+export const getLikeButtonTotalLikeCountAPI = (likerId, referrerURL) =>
+  `https://${
+    IS_TESTNET ? 'rinkeby.like.co' : 'like.co'
+  }/api/like/likebutton/${likerId}/total?referrer=${encodeURIComponent(
+    referrerURL
+  )}`;
