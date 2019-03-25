@@ -131,7 +131,6 @@ export default {
     @apply py-8;
   }
 
-
   &__empty {
     @apply text-gray-9b;
     @apply text-14;
