@@ -18,20 +18,24 @@
     )
       slot(name="feature-prepend")
 
-    ul.liker-comparison-card__feature-list(
-      v-if="isShowFeatures"
+    CollapsibleView.liker-comparison-card__feature-list(
+      :is-collapsible="isFeatureListCollapsible"
     )
-      li.liker-comparison-card__feature(
-        v-for="feature in featureList"
-        :key="feature"
-        :class="{ 'liker-comparison-card__feature--disabled': !getFeatureAvailability(feature) }"
+      ul(
+        v-if="isShowFeatures"
       )
-        TickIcon.liker-comparison-card__feature-bullet
-        | {{ getFeatureText(feature) }}
+        li.liker-comparison-card__feature(
+          v-for="feature in featureList"
+          :key="feature"
+          :class="{ 'liker-comparison-card__feature--disabled': !getFeatureAvailability(feature) }"
+        )
+          TickIcon.liker-comparison-card__feature-bullet
+          | {{ getFeatureText(feature) }}
 
 </template>
 
 <script>
+import CollapsibleView from '~/components/CollapsibleView';
 import TickIcon from '~/assets/icons/tick.svg';
 
 const LIKER_FEATURE = {
@@ -46,6 +50,7 @@ const LIKER_FEATURE = {
 export default {
   name: 'LikerComparisonCard',
   components: {
+    CollapsibleView,
     TickIcon,
   },
   props: {
@@ -64,6 +69,10 @@ export default {
     isShowFeatures: {
       type: Boolean,
       default: true,
+    },
+    isFeatureListCollapsible: {
+      type: Boolean,
+      default: false,
     },
     headerTitle: {
       type: String,
@@ -212,9 +221,13 @@ export default {
 
   &__feature {
     &-list {
-      list-style: none;
-
       @apply pb-24;
+
+      ul {
+        list-style: none;
+
+        @apply p-0;
+      }
     }
 
     @apply text-gray-4a;
