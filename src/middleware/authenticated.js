@@ -1,12 +1,17 @@
 export default function({ req, res, route, store, error }) {
   if (!store.getters.getUserId) {
     let message;
-    if (route.name === 'civic-register') {
-      message = 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER';
-    } else {
-      message = 'LOGIN_NEEDED';
+    switch (route.name) {
+      case 'civic-register':
+        message = 'LOGIN_NEEDED_TO_REGISTER_CIVIC_LIKER';
+        break;
+      case 'civic-payment-stripe-success':
+        message = 'LOGIN_NEEDED_AFTER_CIVIC_LIKER_PAYMENT';
+        break;
+      default:
+        message = 'LOGIN_NEEDED';
+        break;
     }
-
     error({
       statusCode: 401,
       message,

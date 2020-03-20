@@ -12,7 +12,6 @@ import { getStripePaymentStatusAPI, getStripePaymentAPI } from '~/util/api';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  middleware: 'authenticated',
   layout: 'dialog',
   data() {
     return {
@@ -60,6 +59,7 @@ export default {
   mounted() {
     if (
       this.getUserIsCivicLiker &&
+      this.getUserInfo &&
       !this.getUserInfo.isCivicLikerRenewalPeriod
     ) {
       this.$router.replace({ name: 'settings-civic' });
@@ -91,7 +91,10 @@ export default {
           this.$router.replace({ name: 'settings-civic' });
         }
       } catch (err) {
-        if (err.response && err.response.status === 404) {
+        if (
+          err.response &&
+          (err.response.status === 404 || err.response.status === 403)
+        ) {
           await this.initPaymentSession();
         } else {
           console.error(err); // eslint-disable-line no-console

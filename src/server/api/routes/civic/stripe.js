@@ -56,49 +56,55 @@ router.get('/civic/payment/stripe', async (req, res, next) => {
 router.get('/civic/payment/stripe/payment', async (req, res, next) => {
   try {
     setPrivateCacheHeader(res);
-    if (!req.session.user) {
-      res.sendStatus(403);
-      return;
-    }
-    const { edit, referrer, from, utm_source: utmSource } = req.query;
     // start a new checkout session
-    const metadata = { userId: req.session.user };
-    if (from) metadata.from = from.substring(0, 32);
-    if (referrer) metadata.referrer = referrer.substring(0, 500);
-    if (utmSource) metadata.utmSource = utmSource.substring(0, 500);
-    const userRef = userCollection.doc(req.session.user);
-    const userDoc = await userRef.get();
-    const {
-      user: { email } = {},
-      stripe: { subscriptionId, customerId } = {},
-    } = userDoc.data();
+    const { edit, referrer, from, utm_source: utmSource } = req.query;
+    const metadata = {};
     const stripePayload = {
       payment_method_types: ['card'], // only supports card for now
       locale: 'en', // hardcode en before we have zh_Hant
     };
-    if (edit === '1') {
-      stripePayload.mode = 'setup';
-      stripePayload.setup_intent_data = {
-        metadata: {
-          customer_id: customerId,
-          subscription_id: subscriptionId,
-        },
-      };
-      if (email) stripePayload.customer_email = email;
-      stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
-      stripePayload.cancel_url = `${EXTERNAL_URL}/settings/civic`;
+    if (from) metadata.from = from.substring(0, 32);
+    if (referrer) metadata.referrer = referrer.substring(0, 500);
+    if (utmSource) metadata.utmSource = utmSource.substring(0, 500);
+    if (req.session.user) {
+      metadata.userId = req.session.user;
+      const userRef = userCollection.doc(req.session.user);
+      const userDoc = await userRef.get();
+      const {
+        user: { email } = {},
+        stripe: { subscriptionId, customerId } = {},
+      } = userDoc.data();
+      if (edit === '1') {
+        stripePayload.mode = 'setup';
+        stripePayload.setup_intent_data = {
+          metadata: {
+            customer_id: customerId,
+            subscription_id: subscriptionId,
+          },
+        };
+        if (email) stripePayload.customer_email = email;
+        stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
+        stripePayload.cancel_url = `${EXTERNAL_URL}/settings/civic`;
+      } else {
+        stripePayload.subscription_data = {
+          items: [{ plan: STRIPE_PLAN_ID }],
+          metadata,
+        };
+        stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
+        stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
+        if (customerId) {
+          stripePayload.customer = customerId;
+        } else if (email) {
+          stripePayload.customer_email = email;
+        }
+      }
     } else {
       stripePayload.subscription_data = {
         items: [{ plan: STRIPE_PLAN_ID }],
         metadata,
       };
       stripePayload.success_url = `${EXTERNAL_URL}/civic/payment/stripe/success`;
-      stripePayload.cancel_url = `${EXTERNAL_URL}/civic/payment/stripe/fail`;
-      if (customerId) {
-        stripePayload.customer = customerId;
-      } else if (email) {
-        stripePayload.customer_email = email;
-      }
+      stripePayload.cancel_url = `${EXTERNAL_URL}/civic`;
     }
     const session = await stripe.checkout.sessions.create(stripePayload);
     res.json({
