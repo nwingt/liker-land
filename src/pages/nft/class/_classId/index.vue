@@ -487,9 +487,10 @@ export default {
   },
   head() {
     let title = this.NFTName || this.$t('nft_details_page_title');
-    if (this.nftIsNFTBook) {
-      title += ` - ${this.$t('nft_details_page_title_book')}`;
-    } else if (!title.includes(this.$t('nft_details_page_title_article'))) {
+    if (
+      !this.nftIsNFTBook &&
+      !title.includes(this.$t('nft_details_page_title_article'))
+    ) {
       title += ` - ${this.$t('nft_details_page_title_article')}`;
     }
     const description =

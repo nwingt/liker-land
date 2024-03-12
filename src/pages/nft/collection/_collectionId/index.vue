@@ -121,9 +121,10 @@ export default {
   },
   head() {
     let title = this.collectionName || this.$t('nft_details_page_title');
-    if (this.collectionIsBook) {
-      title += ` - ${this.$t('nft_details_page_title_book')}`;
-    } else if (!title.includes(this.$t('nft_details_page_title_article'))) {
+    if (
+      !this.collectionIsBook &&
+      !title.includes(this.$t('nft_details_page_title_article'))
+    ) {
       title += ` - ${this.$t('nft_details_page_title_article')}`;
     }
     const description =
