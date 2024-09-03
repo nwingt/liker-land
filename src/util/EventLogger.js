@@ -26,8 +26,8 @@ export function resetLoggerUser(vue) {
     vue.$gtag.set({ userId: null });
     vue.$gtag.set({ user_id: null });
   }
-  if (this.$crisp) {
-    this.$crisp.push(['do', 'session:reset']);
+  if (vue.$crisp) {
+    vue.$crisp.push(['do', 'session:reset']);
   }
 }
 
@@ -66,7 +66,7 @@ export async function setLoggerUser(
   }
 }
 
-export function updateUserInfo(vue, { wallet, displayName, email }) {
+export function updateLoggerUserInfo(vue, { wallet, displayName, email }) {
   if (vue.$sentry) {
     const opt = {
       id: wallet,

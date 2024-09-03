@@ -31,7 +31,7 @@ import {
 import { checkIsLikeCoinAppInAppBrowser } from '~/util/client';
 import {
   setLoggerUser,
-  updateUserInfo,
+  updateLoggerUserInfo,
   resetLoggerUser,
 } from '~/util/EventLogger';
 
@@ -500,7 +500,7 @@ const actions = {
     }
   },
 
-  async initIfNecessary({ dispatch }, { isLogin = false } = {}) {
+  async initIfNecessary({ dispatch }, { isLogin = true } = {}) {
     const connector = await dispatch('getConnector');
     const connection = await connector.initIfNecessary();
     if (connection) {
@@ -918,7 +918,7 @@ const actions = {
       await dispatch('setLocale', userInfo.locale);
     }
     const { displayName, email } = userInfo;
-    updateUserInfo(this, { email, displayName, wallet: state.address });
+    updateLoggerUserInfo(this, { email, displayName, wallet: state.address });
     return userInfo;
   },
   async walletFetchSessionUserData(
