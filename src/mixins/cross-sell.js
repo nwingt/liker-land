@@ -7,7 +7,9 @@ export default {
     return {
       isCrossSellDialogOpen: false,
       crossSellProductIndex: 0,
-      isEnableCrossSell: Math.random() < 0.5,
+      // HACK: For QA testing
+      isEnableCrossSell: true,
+      // isEnableCrossSell: Math.random() < 0.5,
     };
   },
   computed: {
