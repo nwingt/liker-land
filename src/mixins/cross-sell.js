@@ -36,7 +36,7 @@ export default {
     },
     hasCrossSell() {
       return (
-        this.crossSellProductId &&
+        !!this.crossSellProductId &&
         !this.getShoppingCartBookProductQuantity(this.crossSellProductId)
       );
     },
